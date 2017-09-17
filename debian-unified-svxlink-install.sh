@@ -1,23 +1,26 @@
 #!/bin/bash
 (
-#   Open Repeater Project
-#
-#    Copyright (C) <2015-2017>  <Richard Neese> kb3vgw@gmail.com
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPosE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.
-#
-#    If not, see <http://www.gnu.org/licenses/gpl-3.0.en.html>
+#MIT License
+
+# Copyright (c) [2017] [Richard E Neese]
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 if [[ ! -f  /tmp/stage0 ]] ; then
 
@@ -51,7 +54,7 @@ echo ""
 heading="What Arm Board?"
 title="Please choose the Arm based device you are building on:"
 prompt="Pick a Arm Board:"
-options=( "AMD_64bit" "Intel_32bit" "NanoPi_K2_64bit" "NanoIi_Neo_32bit" "NanoPi_Neo2_64bit" "NanoPi_Neo2+_64bit" "Odroid_C1+_32bit" "Odroid_C2_64bit" "Raspberry_Pi_2_32bit" "Raspberry_Pi_3_32bit" )
+options=( "AMD_64bit" "Intel_32bit" "NanoIi_Neo_32bit" "NanoPi_Neo2_64bit" "NanoPi_Neo+_64bit" "Odroid_C1+_32bit" "Odroid_C2_64bit" "Raspberry_Pi_2_32bit" "Raspberry_Pi_3_32bit" )
 echo "$heading"
 echo "$title"
 PS3="$prompt"
@@ -61,22 +64,20 @@ select opt1 in "${options[@]}" "Quit"; do
     1 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="i386"; break;;
     # Intel/Amd 64bit
     2 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="amd64"; break;;
-	# Nanopi-K2_64bit
-    3 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="k2"; break;;
     # Nanopi-Neo 32bit
-    4 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo"; break;;
+    3 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo"; break;;
     # Nanopi-Neo2 64bit
-    5 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo2"; break;;
+    4 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo2"; break;;
     # Nanopi-Neo2+ 64bit
-    6 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo2+"; break;;
+    5 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo+"; break;;
     # ODROID C1+ 32bit
-    7 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc1+"; break;;
+    6 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc1+"; break;;
     # ODROID-C2 64bit
-    8 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc2"; break;;
+    7 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc2"; break;;
     # Raspberry Pi2 32bit
-    9 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi2"; break;;
+    8 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi2"; break;;
     # RaspberryPI2 64bit
-    10 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi3" break;;
+    9 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi3" break;;
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
     *) echo "Invalid option. Try another one.";continue;;
 
@@ -204,7 +205,7 @@ if [[ ! -f  /tmp/stage1 ]] && [[ ! -f  /tmp/stage1 ]] ; then
   		debian_version=unsupported
 	fi
 
-	if [[ "$debian_version" != "8" ]] | [[ "$debian_version" != "9" ]]; then
+	if [[ "$debian_version" != "8" ]] ; then
 	  	echo
 		echo "**** ERROR ****"
 		echo "This script will only work on debian Jessie images at this time."
@@ -297,21 +298,12 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
         	echo "--------------------------------------------------------------"
         	echo " Adding debian repository...                                  "
         	echo "--------------------------------------------------------------"
-        	if [[ "$debian_version" != "8" ]] ; then
 				cat > /etc/apt/sources.list << DELIM
 deb http://httpredir.debian.org/debian/ stretch main contrib non-free
 deb http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
 deb http://httpredir.debian.org/debian/ stretch-backports main contrib non-free
 deb http://security.debian.org/ stretch/updates main contrib non-free
 DELIM
-			else
-        		cat > /etc/apt/sources.list << DELIM
-deb http://httpredir.debian.org/debian/ jessie main contrib non-free
-deb http://httpredir.debian.org/debian/ jessie-updates main contrib non-free
-deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
-deb http://security.debian.org/ jessie/updates main contrib non-free
-DELIM
-			fi
 		fi
 	fi
 		#update repo 
@@ -329,7 +321,7 @@ DELIM
                 fi
         fi
 
-        #Arbbian repo
+        #Armbian repo
         if [[ $os_short_name == "armb" ]] ; then
                 echo "--------------------------------------------------------------"
                 echo " Adding armbian repository                                    "
@@ -431,9 +423,9 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing svxlink sounds                                    "
         echo "--------------------------------------------------------------"
-		cd /usr/share/svxlink/sounds | exit
+		cd /usr/share/svxlink/sounds || exit
 		git clone https://github.com/RichNeese/en_US-laura-16k-V2.git
-		cd /root | exit
+		cd /root || exit
 
 		#Svxlink Services
 		#enable svxlink 
@@ -476,7 +468,7 @@ if [[ -f /tmp/stage3 ]] && [[ ! -f /tmp/stage4 ]] ; then
 www-data   ALL=(ALL) NOPASSWD: /usr/sbin/orp_helper, NOPASSWD: /usr/bin/aplay, NOPASSWD: /usr/bin/arecord
 DELIM
 
-if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo2+" ]] || [[ $device_short_name == "k2" ]]; then
+if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo+" ]] || [[ $device_short_name == "k2" ]]; then
 	#Install asound.conf for audio performance
 	cat > /etc/asound.conf << DELIM
 pcm.dmixed {
