@@ -3,7 +3,6 @@
 #MIT License
 
 # Copyright (c) [2017] [Richard E Neese]
-
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -32,6 +31,7 @@ dpkg-reconfigure tzdata
 #
 #uptdate Locales
 #
+apt-get update > /dev/null  && apt-get -y install locales-all
 dpkg-reconfigure locales
 
 touch /tmp/stage0
@@ -54,34 +54,29 @@ echo ""
 heading="What Arm Board?"
 title="Please choose the Arm based device you are building on:"
 prompt="Pick a Arm Board:"
-options=( "AMD_64bit" "Intel_32bit" "NanoIi_Neo_32bit" "NanoPi_Neo2_64bit" "NanoPi_Neo+_64bit" "Odroid_C1+_32bit" "Odroid_C2_64bit" "Raspberry_Pi_2_32bit" "Raspberry_Pi_3_32bit" )
+options=( "NanoIi_Neo_32bit" "NanoPi_Neo2_64bit" "NanoPi_Neo+2_64bit" "Odroid_C1+_32bit" "Odroid_C2_64bit" "Raspberry_Pi_2_32bit" "Raspberry_Pi_3_32bit" )
 echo "$heading"
 echo "$title"
 PS3="$prompt"
 select opt1 in "${options[@]}" "Quit"; do
-    case "$REPLY" in
-    # Inetl/AMD 32bit
-    1 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="i386"; break;;
-    # Intel/Amd 64bit
-    2 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="amd64"; break;;
-    # Nanopi-Neo 32bit
-    3 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo"; break;;
-    # Nanopi-Neo2 64bit
-    4 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo2"; break;;
-    # Nanopi-Neo2+ 64bit
-    5 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo+"; break;;
-    # ODROID C1+ 32bit
-    6 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc1+"; break;;
-    # ODROID-C2 64bit
-    7 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc2"; break;;
-    # Raspberry Pi2 32bit
-    8 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi2"; break;;
-    # RaspberryPI2 64bit
-    9 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi3" break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
-    *) echo "Invalid option. Try another one.";continue;;
-
-    esac
+	case "$REPLY" in
+	# Nanopi-Neo 32bit
+	1 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo"; break;;
+	# Nanopi-Neo2 64bit
+	2 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo2"; break;;
+	# Nanopi-Neo2+ 64bit
+	3 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo+2"; break;;
+	# ODROID C1+ 32bit
+	4 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc1+"; break;;
+	# ODROID-C2 64bit
+	5 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc2"; break;;
+	# Raspberry Pi2 32bit
+	6 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi2"; break;;
+	# RaspberryPI2 64bit
+	7 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi3" break;;
+	$(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
+	*) echo "Invalid option. Try another one.";continue;;
+	esac
 done
 echo ""
 
@@ -97,18 +92,18 @@ echo "$heading"
 echo "$title"
 PS3="$prompt"
 select opt1 in "${options[@]}" "Quit"; do
-    case "$REPLY" in
+	case "$REPLY" in
 
-    # armbian
-    1) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="armb"; break;;
-    # debian
-    2) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="deb"; break;;    
-    # raspbian
-    3) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="rasp"; break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
-    *) echo "Invalid option. Try another one.";continue;;
+	# armbian
+	1) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="armb"; break;;
+	# debian
+	2) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="deb"; break;;    
+	# raspbian
+	3) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="rasp"; break;;
+	$(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
+	*) echo "Invalid option. Try another one.";continue;;
 
-    esac
+	esac
 done
 echo ""
 
@@ -124,19 +119,19 @@ echo "$heading"
 echo "$title"
 PS3="$prompt "
 select opt1 in "${options[@]}" "Quit"; do
-    case "$REPLY" in
+	case "$REPLY" in
 
-    # Stable Release
-    1 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-stable"; break;;
-    # Testing Release
-    2 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-testing"; break;;
-    # Devel Release
-    3 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-devel"; break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
+	# Stable Release
+	1 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-stable"; break;;
+	# Testing Release
+	2 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-testing"; break;;
+	# Devel Release
+	3 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-devel"; break;;
+	$(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
 
-    *) echo "Invalid option. Try another one.";continue;;
+	*) echo "Invalid option. Try another one.";continue;;
 
-    esac
+	esac
 done
 echo ""
 
@@ -152,17 +147,17 @@ echo "$heading"
 echo "$title"
 PS3="$prompt"
 select opt1 in "${options[@]}" "Quit"; do
-    case "$REPLY" in
-    # Soundcard usb
-    1 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="usb"; break;;
+	case "$REPLY" in
+	# Soundcard usb
+	1 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="usb"; break;;
 
-    # Soundcard onboard
-    2 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="onboard"; break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
+	# Soundcard onboard
+	2 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="onboard"; break;;
+	$(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
 
-    *) echo "Invalid option. Try another one.";continue;;
+	*) echo "Invalid option. Try another one.";continue;;
 
-    esac
+	esac
 done
 echo ""
 
@@ -180,7 +175,7 @@ if [[ ! -f  /tmp/stage1 ]] && [[ ! -f  /tmp/stage1 ]] ; then
 	read -r svx_hostname
 
 	if [[ $svx_hostname == "" ]] ; then
- 	       svx_hostname="$dfhost"
+		   svx_hostname="$dfhost"
 	fi
 
 	echo ""
@@ -189,9 +184,9 @@ if [[ ! -f  /tmp/stage1 ]] && [[ ! -f  /tmp/stage1 ]] ; then
 
 	# debian Systems
 	if [[ -f /etc/debian_version ]] ; then
-  		os=debian
+		os=debian
 	else
-  		os=unknown
+		os=unknown
 	fi
 
 	# Prepare debian systems for the installation process
@@ -199,16 +194,16 @@ if [[ ! -f  /tmp/stage1 ]] && [[ ! -f  /tmp/stage1 ]] ; then
 
 	# Jan 17, 2016
 	# Detect the version of debian, and do some custom work for different versions
-	if (grep -q "8." /etc/debian_version) ; then
-  		debian_version=8
+	if (grep -q "9." /etc/debian_version) ; then
+		debian_version=9
 	else
-  		debian_version=Unsupported
+		debian_version=Unsupported
 	fi
 
-	if [[ "$debian_version" != "8" ]]; then
-	  	echo
+	if [[ "$debian_version" != "9root" ]]; then
+		echo
 		echo "**** ERROR ****"
-		echo "This script will only work on debian Jessie images at this time."
+		echo "This script will only work on debian Stretch images at this time."
 		echo "No other version of debian is supported at this time. "
 		echo "**** EXITING ****"
 		exit -1
@@ -220,13 +215,13 @@ fi
 #
 echo ""
 cat << DELIM
-                   Not Ment For L.A.M.P Installs
+			   Not Ment For L.A.M.P Installs
 
-                  L.A.M.P = Linux Apache Mysql PHP
+			  L.A.M.P = Linux Apache Mysql PHP
 
-         This Script Is Meant To Be Run On A Fresh Install Of
+	 This Script Is Meant To Be Run On A Fresh Install Of
 
-             debian 8 (Jessie) ArmHF / Arm64 
+		 debian 8 (Stretch) ArmHF / Arm64 
 
 DELIM
 
@@ -234,42 +229,41 @@ DELIM
 # Testing for internet connection. Pulled from and modified
 # http://www.linuxscrew.com/2009/04/02/tiny-bash-scripts-check-internet-connection-availability/
 #
-    echo "--------------------------------------------------------------"
-    echo "This Script Currently Requires a internet connection          "
-    echo "--------------------------------------------------------------"
-    wget -q --tries=10 --timeout=5 http://www.google.com -O /tmp/index.google &> /dev/null
+	echo "--------------------------------------------------------------"
+	echo "This Script Currently Requires a internet connection          "
+	echo "--------------------------------------------------------------"
+	wget -q --tries=10 --timeout=5 http://www.google.com -O /tmp/index.google &> /dev/null
 
-    if [[ ! -s /tmp/index.google ]] ;then
-            echo "No Internet connection. Please check ethernet cable / wifi connection"
-            /bin/rm /tmp/index.google
-            exit 1
-    else
-            echo "I Found the Internet ... continuing!!!!!"
-            /bin/rm /tmp/index.google
-    fi
+	if [[ ! -s /tmp/index.google ]] ;then
+		echo "No Internet connection. Please check ethernet cable / wifi connection"
+		/bin/rm /tmp/index.google
+			exit 1
+	else
+			echo "I Found the Internet ... continuing!!!!!"
+			/bin/rm /tmp/index.google
+	fi
 
-    echo "--------------------------------------------------------------"
-    printf ' Current ip is eth0: '; ip -f inet addr show dev eth0 | sed -n 's/^ *inet *\([.0-9]*\).*/\1/p'
-    printf ' Current ip is wlan0: '; ip -f inet addr show dev wlan0 | sed -n 's/^ *inet *\([.0-9]*\).*/\1/p'
-    echo "--------------------------------------------------------------"
-    echo
-
-    echo "--------------------------------------------------------------"
-    echo " Set a reboot if Kernel Panic                                 "
-    echo "--------------------------------------------------------------"
-    cat >> /etc/sysctl.conf << DELIM
+	echo "--------------------------------------------------------------"
+	printf ' Current ip is eth0: '; ip -f inet addr show dev eth0 | sed -n 's/^ *inet *\([.0-9]*\).*/\1/p'
+	printf ' Current ip is wlan0: '; ip -f inet addr show dev wlan0 | sed -n 's/^ *inet *\([.0-9]*\).*/\1/p'
+	echo "--------------------------------------------------------------"
+	echo
+	echo "--------------------------------------------------------------"
+	echo " Set a reboot if Kernel Panic                                 "
+	echo "--------------------------------------------------------------"
+	cat >> /etc/sysctl.conf << DELIM
 kernel.panic = 10
 DELIM
 
-    echo "--------------------------------------------------------------"
-    echo " Setting Host/Domain name                                     "
-    echo "--------------------------------------------------------------"
-    cat > /etc/hostname << DELIM
+	echo "--------------------------------------------------------------"
+	echo " Setting Host/Domain name                                     "
+	echo "--------------------------------------------------------------"
+	cat > /etc/hostname << DELIM
 $svx_hostname
 DELIM
 
-# Setup /etc/hosts
-cat > /etc/hosts << DELIM
+	# Setup /etc/hosts
+	cat > /etc/hosts << DELIM
 127.0.0.1       localhost
 ::1             localhost ip6-localhost ip6-loopback
 fe00::0         ip6-localnet
@@ -280,7 +274,7 @@ ff02::2         ip6-allrouters
 127.0.0.1       $svx_hostname
 
 DELIM
-touch /tmp/stage1
+	touch /tmp/stage1
 fi
 
 if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
@@ -288,238 +282,210 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
 # all boards
 # Setting apt_get to use the httpredirecter to get
 # To have <APT> automatically select a mirror close to you, use the Geo-ip redirector in your
-# sources.list "deb http://httpredir.debian.org/debian/ jessie main".
+# sources.list "deb http://httpredir.debian.org/debian/ stretch main".
 # See http://httpredir.debian.org/ for more information.  The redirector uses HTTP 302 redirects
 # not dnS to serve content so is safe to use with Google dnS.
 # See also <which httpredir.debian.org>.  This service is identical to http.debian.net.
 #
 	if [[ $os_short_name == "armb" ]] || [[ $os_short_name == "deb" ]]; then
-		if [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "i386" ]] || [[ $device_short_name == "amd64" ]]; then
-        	echo "--------------------------------------------------------------"
-        	echo " Adding debian repository...                                  "
-        	echo "--------------------------------------------------------------"
-			if [[ "$debian_version" != "8" ]] ; then
+		if [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] ; then
+			echo "--------------------------------------------------------------"
+			echo " Adding debian repository...                                  "
+			echo "--------------------------------------------------------------"
 				cat > /etc/apt/sources.list << DELIM
 deb http://httpredir.debian.org/debian/ stretch main contrib non-free
 deb http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
 deb http://httpredir.debian.org/debian/ stretch-backports main contrib non-free
 deb http://security.debian.org/ stretch/updates main contrib non-free
 DELIM
-			else
-				cat > /etc/apt/sources.list << DELIM
-deb http://httpredir.debian.org/debian/ jessie main contrib non-free
-deb http://httpredir.debian.org/debian/ jessie-updates main contrib non-free
-deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
-deb http://security.debian.org/ jessie/updates main contrib non-free
-DELIM
-			fi
 		fi
 	fi
-		#update repo 
-		apt-get update > /dev/null
-		
-        #install debian keys
-        if [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] ; then
-                echo "--------------------------------------------------------------"
-                echo " Updating debian repository keys..                            "
-                echo "--------------------------------------------------------------"
-                if [[ ! -f key ]] ;then
-                apt-get install -y --force-yes --fix-missing debian-archive-keyring debian-keyring debian-ports-archive-keyring
-                apt-key update -y --fix-missing
-                touch key
-                fi
-        fi
 
-        #Armbian repo
-        if [[ $os_short_name == "armb" ]] ; then
-                echo "--------------------------------------------------------------"
-                echo " Adding armbian repository                                    "
-                echo "--------------------------------------------------------------"
-                cat > /etc/apt/sources.list.d/armbian.list << DELIM
-deb http://apt.armbian.com jessie main utils jessie-desktop
+	#update repo 
+	apt-get update > /dev/null
+			
+	#install debian keys
+	if [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] ; then
+		echo "--------------------------------------------------------------"
+		echo " Updating debian repository keys..                            "
+		echo "--------------------------------------------------------------"
+			if [[ ! -f key ]] ;then
+				apt-get install -y --force-yes --fix-missing debian-archive-keyring debian-keyring debian-ports-archive-keyring
+				apt-key update -y --fix-missing
+				touch key
+			fi
+	fi
+
+	#Armbian repo
+	if [[ $os_short_name == "armb" ]] ; then
+		echo "--------------------------------------------------------------"
+		echo " Adding armbian repository                                    "
+		echo "--------------------------------------------------------------"
+		cat > /etc/apt/sources.list.d/armbian.list << DELIM
+deb http://apt.armbian.com stretch main utils stretch-desktop
 DELIM
-        fi
+	fi
 
-        if [[ $svx_short_name == "svx-stable" ]] ; then
-                echo "--------------------------------------------------------------"
-                echo " Adding SvxLink Stable Repository                             "
-                echo "--------------------------------------------------------------"
-                cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://45.55.65.11/svxlink/stable/debian/ jessie main
+	if [[ $svx_short_name == "svx-stable" ]] ; then
+		echo "--------------------------------------------------------------"
+		echo " Adding SvxLink Stable Repository                             "
+		echo "--------------------------------------------------------------"
+		cat > /etc/apt/sources.list.d/svxlink.list << DELIM
+deb http://45.55.65.11/svxlink/stable/debian/ stretch main
 DELIM
-        fi
+	fi
 
-        # SvxLink Testing Repo
-        if [[ $svx_short_name == "svx-testing" ]] ; then
-                echo "--------------------------------------------------------------"
-                echo " Adding SvxLink Testing Repository                            "
-                echo "--------------------------------------------------------------"
-                cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://45.55.65.11/svxlink/testing/debian/ jessie main
+	# SvxLink Testing Repo
+	if [[ $svx_short_name == "svx-testing" ]] ; then
+		echo "--------------------------------------------------------------"
+		echo " Adding SvxLink Testing Repository                            "
+		echo "--------------------------------------------------------------"
+		cat > /etc/apt/sources.list.d/svxlink.list << DELIM
+deb http://45.55.65.11/svxlink/testing/debian/ stretch main
 DELIM
-		fi
+	fi
 
-        # SvxLink Release Repo
-        if [[ $svx_short_name == "svx-devel" ]] ; then
-                echo "--------------------------------------------------------------"
-                echo " Adding SvxLink Devel Repository                              "
-                echo "--------------------------------------------------------------"
-                cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://45.55.65.11/svxlink/devel/debian/ jessie main
+	# SvxLink Release Repo
+	if [[ $svx_short_name == "svx-devel" ]] ; then
+		echo "--------------------------------------------------------------"
+		echo " Adding SvxLink Devel Repository                              "
+		echo "--------------------------------------------------------------"
+		cat > /etc/apt/sources.list.d/svxlink.list << DELIM
+deb http://45.55.65.11/svxlink/devel/debian/ stretch main
 DELIM
-        fi
+	fi
 
-                echo "--------------------------------------------------------------"
-                echo "Performing Base os Update...                                  "
-                echo "--------------------------------------------------------------"
-        		apt-get update > /dev/null
-        		for i in upgrade clean ;do apt-get "${i}" -y --force-yes --fix-missing ; done
+	echo "--------------------------------------------------------------"
+	echo "Performing Base os Update...                                  "
+	echo "--------------------------------------------------------------"
+	apt-get update > /dev/null
+	for i in upgrade clean ;do apt-get "${i}" -y --force-yes --fix-missing ; done
 
-touch /tmp/stage2
+	touch /tmp/stage2
 fi
 
 if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
-        echo "--------------------------------------------------------------"
-        echo " Installing Svxlink Dependencies...                           "
-        echo "--------------------------------------------------------------"
-        #svxlink deps
-        apt-get install -y --fix-missing sqlite3 libopus0 alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2 libasound2-plugin-equal \
-                libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6  bzip2 gpsd gpsd-clients flite wvdial i2c-tools fail2ban resolvconf \
-                inetutils-syslogd screen time uuid vim usbutils dialog logrotate cron gawk watchdog network-manager git-core python-dev
-		if [[ "$debian_version" != "8" ]] ; then
-			apt-get install -y --fix-missing libsigc++-2.0-0v5 
-		else
-			apt-get install -y --fix-missing libsigc++-2.0-0c2a alsa-base
-		fi
-                
-        #pythoin deps for python interfae
-        echo "--------------------------------------------------------------"
-        echo " Installing puthon adn extra deps                             "
-        echo "--------------------------------------------------------------"
-        apt-get install -y --fix-missing python-usb python-pip python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
+	echo "--------------------------------------------------------------"
+	echo " Installing Svxlink Dependencies...                           "
+	echo "--------------------------------------------------------------"
+	#svxlink deps
+	apt-get install -y --fix-missing sqlite3 libopus0 alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2 libasound2-plugin-equal \
+			libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 gpsd gpsd-clients flite wvdial i2c-tools fail2ban resolvconf inetutils-syslogd \
+			screen time uuid vim usbutils dialog logrotate cron gawk watchdog network-manager git-core python3-dev libsigc++-2.0-0v5 
+			
+				
+	#python deps for python interfae
+	echo "--------------------------------------------------------------"
+	echo " Installing puthon adn extra deps                             "
+	echo "--------------------------------------------------------------"
+	apt-get install -y --fix-missing python-usb python-pip python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
 		
-		#python spidev support
-		pip install spidev
+	#python spidev support
+	pip install setuptools
+	pip install spidev
 
-		#Cleanup
-		apt-get clean
+	#Cleanup
+	apt-get clean
 
-        # Install svxlink
-        echo "--------------------------------------------------------------"
-        echo " Installing svxlink + remotetrx                               "
-        echo "--------------------------------------------------------------"
-        apt-get -y --force-yes install svxlink-server remotetrx 
-        
-        
-        if [[ $svx_short_name == "svx-devel" ]] ; then
+	# Install svxlink
+	echo "--------------------------------------------------------------"
+	echo " Installing svxlink + remotetrx                               "
+	echo "--------------------------------------------------------------"
+	apt-get -y --force-yes install svxlink-server remotetrx svxreflector
+
+	apt-get clean
+
+	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
+		echo "--------------------------------------------------------------"
+		echo " Installingsvxlink into the gpio group                        "
+		echo "--------------------------------------------------------------"
+		#adding user svxlink to gpio user group
+		usermod -a -G gpio svxlink
+	fi
+
+	echo "--------------------------------------------------------------"
+	echo " Installing svxlink sounds                                    "
+	echo "--------------------------------------------------------------"
+	git clone https://github.com/RichNeese/en_US-laura-16k-V2.git
+	cp -rp en_US-laura-16k-V2/* /usr/share/svxlink/sounds/
+	rm -rf en_US-laura-16k-V2
+
+	#Svxlink Services
+	#enable svxlink 
+	echo "--------------------------------------------------------------"
+	echo " Enabling svxlink Service                                "
+	echo "--------------------------------------------------------------"
+	systemctl enable svxlink
+		
+	if [[ $svx_short_name == "svx-devel" ]] ; then
 		#Enable svxreflector
 		echo "--------------------------------------------------------------"
-        echo " Installing SvxReflector Service                              "
-        echo "--------------------------------------------------------------"		
-		apt-get -y --force-yes install svxreflector
-		fi
-		
-        apt-get clean
-
-		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
-        echo "--------------------------------------------------------------"
-        echo " Installingsvxlink into the gpio group                        "
-        echo "--------------------------------------------------------------"
-        #adding user svxlink to gpio user group
-        usermod -a -G gpio svxlink
-		fi
-
-        echo "--------------------------------------------------------------"
-        echo " Installing svxlink sounds                                    "
-        echo "--------------------------------------------------------------"
-		cd /usr/share/svxlink/sounds || exit
-		git clone https://github.com/RichNeese/en_US-laura-16k-V2.git
-		cd /root || exit
-
-		#Svxlink Services
-		#enable svxlink 
-		echo "--------------------------------------------------------------"
-        echo " Enabling svxlink Service                                "
-        echo "--------------------------------------------------------------"
-		systemctl enable svxlink
-		
-		if [[ $svx_short_name == "svx-devel" ]] ; then
-		#Enable svxreflector
-		echo "--------------------------------------------------------------"
-        echo " Enabling SvxReflector Service                              "
-        echo "--------------------------------------------------------------"		
+		echo " Enabling SvxReflector Service                              "
+		echo "--------------------------------------------------------------"		
 		systemctl enable svxreflector
-		fi
-		
-		#Enable remotetx
-		echo "--------------------------------------------------------------"
-        echo " Enabling remotetrx Service                                 "
-        echo "--------------------------------------------------------------"
-		systemctl enable remotetrx
+	fi
+			
+	#Enable remotetx
+	echo "--------------------------------------------------------------"
+	echo " Enabling remotetrx Service                                 "
+	echo "--------------------------------------------------------------"
+	systemctl enable remotetrx
 
-touch /tmp/stage3
+	touch /tmp/stage3
 fi
 
 if [[ -f /tmp/stage3 ]] && [[ ! -f /tmp/stage4 ]] ; then
-        # raspBERRY PI ONLY: Add svxlink user to groups: gpio, audio, and daemon
-                if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]]; then
-                        echo "--------------------------------------------------------------"
-                        echo " Add svxlink user to groups: gpio, audio, and daemon          "
-                        echo "--------------------------------------------------------------"
-                                usermod -a -G daemon,gpio,audio svxlink
-                fi
+	# raspBERRY PI ONLY: Add svxlink user to groups: gpio, audio, and daemon
+	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]]; then
+		echo "--------------------------------------------------------------"
+		echo " Add svxlink user to groups: gpio, audio, and daemon          "
+		echo "--------------------------------------------------------------"
+		usermod -a -G daemon,gpio,audio svxlink
+	fi
 
-                echo "--------------------------------------------------------------"
-                echo " Setting up sudoers permissions for openrepeater              "
-                echo "--------------------------------------------------------------"
-                cat >> /etc/sudoers << DELIM
-#allow www-data to access amixer and service
-www-data   ALL=(ALL) NOPASSWD: /usr/sbin/orp_helper, NOPASSWD: /usr/bin/aplay, NOPASSWD: /usr/bin/arecord
-DELIM
-
-if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo+" ]] || [[ $device_short_name == "k2" ]]; then
+if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo+2" ]] ; then
 	#Install asound.conf for audio performance
 	cat > /etc/asound.conf << DELIM
 pcm.dmixed {
-    type dmix
-    ipc_key 1024
-    ipc_key_add_uid 0
-    slave.pcm "hw:0,0"
+	type dmix
+	ipc_key 1024
+	ipc_key_add_uid 0
+	slave.pcm "hw:0,0"
 }
 
 pcm.dsnooped {
-    type dsnoop
-    ipc_key 1025
-    slave.pcm "hw:0,0"
+	type dsnoop
+	ipc_key 1025
+	slave.pcm "hw:0,0"
 }
 
 pcm.duplex {
-    type asym
-    playback.pcm "dmixed"
-    capture.pcm "dsnooped"
+	type asym
+	playback.pcm "dmixed"
+	capture.pcm "dsnooped"
 }
 
 pcm.left {
-    type asym
-    playback.pcm "shared_left"
-    capture.pcm "dsnooped"
+	type asym
+	playback.pcm "shared_left"
+	capture.pcm "dsnooped"
 }
 
 pcm.right {
-    type asym
-    playback.pcm "shared_right"
-    capture.pcm "dsnooped"
+	type asym
+	playback.pcm "shared_right"
+	capture.pcm "dsnooped"
 }
 
 # Instruct ALSA to use pcm.duplex as the default device
 pcm.!default {
-    type plug
-    slave.pcm "duplex"
+	type plug
+	slave.pcm "duplex"
 }
 
 ctl.!default {
-    type hw
-    card 0
+	type hw
+	card 0
 }
 
 # split left channel off
@@ -549,10 +515,10 @@ Pcm_slave.hw_loopback {
 Pcm.plug_loopback {
    Type plug
    Slave hw_loopback
-    Ttable {
-    0.0 = 1
-    0.1 = 1
-  }
+	Ttable {
+	0.0 = 1
+	0.1 = 1
+	}
 }
 
 Ctl. Equal  {
@@ -563,7 +529,7 @@ Ctl. Equal  {
 Pcm. Plugequal  {
    type equal ;
    Slavic. pcm  "plughw: 0.0" ;
-    Controls "/home/pi/.alsaequal.bin"
+	Controls "/home/pi/.alsaequal.bin"
 }
 
 Pcm. Equal  {
@@ -577,7 +543,7 @@ DELIM
 	# Rasberry PI 2/3 ,ODROID C1+/C2:
 	# Set up usb sound for alsa mixer
 	if [[ $snd_short_name == "usb" ]] ; then
-		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "i386" ]] || [[ $device_short_name == "amd64" ]]; then
+		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] ; then
 			echo "--------------------------------------------------------------"
 			echo " Set up usb sound for alsa mixer                              "
 			echo "--------------------------------------------------------------"
@@ -595,7 +561,7 @@ DELIM
 	fi
 
 
-	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo2+" ]] || [[ $device_short_name == "k2" ]] ; then
+	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo+2" ]] || [[ $device_short_name == "k2" ]] ; then
 		echo "--------------------------------------------------------------"
 		echo " Enable the spi & i2c /etc/modules                            "
 		echo "--------------------------------------------------------------"
@@ -603,7 +569,7 @@ DELIM
 	fi
 
 	if [[ $os_short_name == "rasp" ]] ; then
-		if [[ $device_short_name == "rpi" ]] || [[ $device_short_name == "rpi3" ]] ; then
+		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
 			echo "--------------------------------------------------------------"
 			echo " Configuring /boot/config.txt options 1"
 			echo "--------------------------------------------------------------"
@@ -625,7 +591,7 @@ DELIM
 		fi
 	fi
 
-	if [[ $device_short_name == "rpi" ]] || [[ $device_short_name == "rpi3" ]] ; then
+	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
 		echo "--------------------------------------------------------------"
 		echo " Configuring /boot/config.txt options part 3                  "
 		echo "--------------------------------------------------------------"
@@ -664,15 +630,15 @@ DELIM
 		#/boot/config.txt
 		sed -i /boot/config.txt -e "s#dtparam=audio=on#\#dtparam=audio=on#"
 	fi
-	
-	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]]; then
+		
+	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
 		echo "--------------------------------------------------------------"
 		echo " Installing wiringpi                                          "
 		echo "--------------------------------------------------------------"
 		apt-get install -y --force-yes wiringpi
 	fi
 
-touch /tmp/stage4
+	touch /tmp/stage4
 fi
 
 if [[ -f /tmp/stage4 ]] && [[ ! -f /tmp/stage5 ]] ; then
