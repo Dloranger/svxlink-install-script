@@ -372,7 +372,7 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
         #svxlink deps
         apt-get install -y --fix-missing sqlite3 libopus0 alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2 libasound2-plugin-equal \
-                libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6  bzip2 gpsd gpsd-clients flite wvdial i2c-tools fail2ban resolvconf inetutils-syslogd \
+                libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 gpsd gpsd-clients flite wvdial i2c-tools fail2ban resolvconf inetutils-syslogd \
 				screen time uuid vim usbutils dialog logrotate cron gawk watchdog network-manager git-core python-dev libsigc++-2.0-0c2a alsa-base
                 
         #python deps for python interfae
@@ -397,7 +397,7 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 
 		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
         echo "--------------------------------------------------------------"
-        echo " Installingsvxlink into the gpio group                        "
+        echo " Installing svxlink into the gpio group                        "
         echo "--------------------------------------------------------------"
         #adding user svxlink to gpio user group
         usermod -a -G gpio svxlink
@@ -406,9 +406,9 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing svxlink sounds                                    "
         echo "--------------------------------------------------------------"
-		cd /usr/share/svxlink/sounds || exit
 		git clone https://github.com/RichNeese/en_US-laura-16k-V2.git
-		cd /root || exit
+		cp -rp en_US-laura-16k-V2/* /usr/share/svxlink/sounds/
+		rm -rf en_US-laura-16k-V2
 
 		#Svxlink Services
 		#enable svxlink 
