@@ -558,8 +558,8 @@ DELIM
 		echo "--------------------------------------------------------------"
 		echo " Enable the bcm2708 and bcm2835 /etc/modules                  "
 		echo "--------------------------------------------------------------"
-		#{ echo "i2c-bcm2708"; echo "spi-bcm2835"; } >> /etc/modules
-		{ echo "i2c-bcm2708"; } >> /etc/modules
+		{ echo "i2c-bcm2708"; echo "spi-bcm2835"; } >> /etc/modules
+		
 	fi
 
 
@@ -578,7 +578,7 @@ DELIM
 			echo "--------------------------------------------------------------"
 			sed -i /boot/config.txt -e "s#dtparam=audio=on#dtparam=audio=off#"
 			sed -i /boot/config.txt -e "s#\#dtparam=i2c_arm=on#dtparam=i2c_arm=on#"
-			#sed -i /boot/config.txt -e "s#\#dtparam=spi=on#dtparam=spi=on#"
+			sed -i /boot/config.txt -e "s#\#dtparam=spi=on#dtparam=spi=on#"
 		fi
 	fi
 
@@ -590,7 +590,7 @@ DELIM
 			sed -i /boot/config.txt -e "s#dtparam=audio=on#dtparam=audio=off#"
 			sed -i /boot/config.txt -e "s#dtparam=i2c_arm=off#dtparam=i2c_arm=on#"
 			sed -i /boot/config.txt -e "s#dtparam=i2c1=off#dtparam=i2c_arm=on#"
-			#sed -i /boot/config.txt -e "s#dtparam=spi=off#dtparam=spi=on#"
+			sed -i /boot/config.txt -e "s#dtparam=spi=off#dtparam=spi=on#"
 		fi
 	fi
 
