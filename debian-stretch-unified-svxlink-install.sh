@@ -200,7 +200,7 @@ if [[ ! -f  /tmp/stage1 ]] && [[ ! -f  /tmp/stage1 ]] ; then
 		debian_version=Unsupported
 	fi
 
-	if [[ "$debian_version" != "9root" ]]; then
+	if [[ "$debian_version" != "9" ]]; then
 		echo
 		echo "**** ERROR ****"
 		echo "This script will only work on debian Stretch images at this time."
@@ -221,7 +221,7 @@ cat << DELIM
 
 	 This Script Is Meant To Be Run On A Fresh Install Of
 
-		 debian 8 (Stretch) ArmHF / Arm64 
+		 debian 9 (Stretch) ArmHF / Arm64 
 
 DELIM
 
@@ -370,19 +370,18 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 	echo "--------------------------------------------------------------"
 	#svxlink deps
 	apt-get install -y --fix-missing sqlite3 libopus0 alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2 libasound2-plugin-equal \
-			libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 gpsd gpsd-clients flite wvdial i2c-tools fail2ban resolvconf inetutils-syslogd \
-			screen time uuid vim usbutils dialog logrotate cron gawk watchdog network-manager git-core python3-dev libsigc++-2.0-0v5 
-			
-				
+			libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 gpsd gpsd-clients flite i2c-tools fail2ban resolvconf inetutils-syslogd \
+			screen time uuid vim usbutils whiptail dialog logrotate cron gawk watchdog git-core python3-dev libsigc++-2.0-0v5 
+
 	#python deps for python interfae
 	echo "--------------------------------------------------------------"
 	echo " Installing puthon adn extra deps                             "
 	echo "--------------------------------------------------------------"
 	apt-get install -y --fix-missing python-usb python-pip python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
-		
+
 	#python spidev support
-	pip install setuptools
-	pip install spidev
+	#pip install setuptools
+	#pip install spidev
 
 	#Cleanup
 	apt-get clean
@@ -416,7 +415,7 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 	echo " Enabling svxlink Service                                "
 	echo "--------------------------------------------------------------"
 	systemctl enable svxlink
-		
+
 	if [[ $svx_short_name == "svx-devel" ]] ; then
 		#Enable svxreflector
 		echo "--------------------------------------------------------------"
@@ -424,7 +423,7 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 		echo "--------------------------------------------------------------"		
 		systemctl enable svxreflector
 	fi
-			
+
 	#Enable remotetx
 	echo "--------------------------------------------------------------"
 	echo " Enabling remotetrx Service                                 "
@@ -519,22 +518,6 @@ Pcm.plug_loopback {
 	0.0 = 1
 	0.1 = 1
 	}
-}
-
-Ctl. Equal  {
-   type equal ;
-   Controls "/home/pi/.alsaequal.bin"
-}
-
-Pcm. Plugequal  {
-   type equal ;
-   Slavic. pcm  "plughw: 0.0" ;
-	Controls "/home/pi/.alsaequal.bin"
-}
-
-Pcm. Equal  {
-   type plug ;
-   Slavic. pcm plugequal ;
 }
 
 DELIM
