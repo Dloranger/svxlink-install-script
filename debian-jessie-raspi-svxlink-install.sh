@@ -48,65 +48,6 @@ fi
 echo "--------------------------------------------------------------"
 echo "Looks Like you are root.... continuing!"
 echo "--------------------------------------------------------------"
-#
-# Request user input to ask for device type
-#
-echo ""
-heading="What Arm Board?"
-title="Please choose the Arm based device you are building on:"
-prompt="Pick a Arm Board:"
-options=( "NanoIi_Neo_32bit" "NanoPi_Neo2_64bit" "NanoPi_Neo+2_64bit" "Odroid_C1+_32bit" "Odroid_C2_64bit" "Raspberry_Pi_2_32bit" "Raspberry_Pi_3_32bit" )
-echo "$heading"
-echo "$title"
-PS3="$prompt"
-select opt1 in "${options[@]}" "Quit"; do
-    case "$REPLY" in
-    # Nanopi-Neo 32bit
-    1 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo"; break;;
-    # Nanopi-Neo2 64bit
-    2 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo2"; break;;
-    # Nanopi-Neo2+ 64bit
-    3 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="neo+2"; break;;
-    # ODROID C1+ 32bit
-    4 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc1+"; break;;
-    # ODROID-C2 64bit
-    5 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="oc2"; break;;
-    # Raspberry Pi2 32bit
-    6 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi2"; break;;
-    # RaspberryPI2 64bit
-    7 ) echo ""; echo "Building for $opt1"; device_long_name="$opt1"; device_short_name="rpi3" break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
-    *) echo "Invalid option. Try another one.";continue;;
-
-    esac
-done
-echo ""
-
-#
-# Request user input to ask for os type
-#
-echo ""
-heading="What os ?"
-title="Please choose the os you are building on:"
-prompt="Pick a os:"
-options=("armbian" "debian" "raspbian")
-echo "$heading"
-echo "$title"
-PS3="$prompt"
-select opt1 in "${options[@]}" "Quit"; do
-    case "$REPLY" in
-
-    # armbian
-    1) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="armb"; break;;
-    # debian
-    2) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="deb"; break;;    
-    # raspbian
-    3) echo ""; echo "Building for $opt1"; os_long_name="$opt1"; os_short_name="rasp"; break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
-    *) echo "Invalid option. Try another one.";continue;;
-
-    esac
-done
 echo ""
 
 #
@@ -116,7 +57,7 @@ echo ""
 heading="What type of svxlink install: Stable=1.5.99 Teesting is 1.5.99.x  Devel=Head ?"
 title="Please choose svxlink install type:"
 prompt="Pick a Svxlink install type Stable=1.5.11.99 Teesting is 1.5.99.x  Devel=Head : "
-options=("stable" "testing" "devel")
+options=("stable" "release" "testing" "devel")
 echo "$heading"
 echo "$title"
 PS3="$prompt "
@@ -125,6 +66,8 @@ select opt1 in "${options[@]}" "Quit"; do
 
     # Stable Release
     1 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-stable"; break;;
+	# Release Release
+    2 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-release"; break;;
     # Testing Release
     2 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-testing"; break;;
     # Devel Release
@@ -144,7 +87,7 @@ echo ""
 heading="What type of SoundCard ?"
 title="Please choose Soundcard type:"
 prompt="Pick your sound card:"
-options=("usbsnd" "onboard" )
+options=("usbsnd" "sgtl5000")
 echo "$heading"
 echo "$title"
 PS3="$prompt"
@@ -153,10 +96,10 @@ select opt1 in "${options[@]}" "Quit"; do
     # Soundcard usb
     1 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="usb"; break;;
 
-    # Soundcard onboard
-    2 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="onboard"; break;;
+    # Soundcard sgtl5000
+    2 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="sgtl"; break;;
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
-
+	
     *) echo "Invalid option. Try another one.";continue;;
 
     esac
@@ -290,60 +233,45 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
 # not dnS to serve content so is safe to use with Google dnS.
 # See also <which httpredir.debian.org>.  This service is identical to http.debian.net.
 #
-	if [[ $os_short_name == "armb" ]] || [[ $os_short_name == "deb" ]]; then
-		if [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] ; then
-        	echo "--------------------------------------------------------------"
-        	echo " Adding debian repository...                                  "
-        	echo "--------------------------------------------------------------"
-				cat > /etc/apt/sources.list << DELIM
+
+   	echo "--------------------------------------------------------------"
+   	echo " Adding debian repository...                                  "
+    echo "--------------------------------------------------------------"
+	cat > /etc/apt/sources.list << DELIM
 deb http://httpredir.debian.org/debian/ jessie main contrib non-free
 deb http://httpredir.debian.org/debian/ jessie-updates main contrib non-free
 deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
 deb http://security.debian.org/ jessie/updates main contrib non-free
 DELIM
-		fi
-	fi
-		#update repo 
-		apt-get update > /dev/null
 		
-        #install debian keys
-        if [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] ; then
-                echo "--------------------------------------------------------------"
-                echo " Updating debian repository keys..                            "
-                echo "--------------------------------------------------------------"
-                if [[ ! -f key ]] ;then
-                apt-get install -y --force-yes --fix-missing debian-archive-keyring debian-keyring debian-ports-archive-keyring
-                apt-key update -y --fix-missing
-                touch key
-                fi
-        fi
-
-        #Armbian repo
-        if [[ $os_short_name == "armb" ]] ; then
-                echo "--------------------------------------------------------------"
-                echo " Adding armbian repository                                    "
-                echo "--------------------------------------------------------------"
-                cat > /etc/apt/sources.list.d/armbian.list << DELIM
-deb http://apt.armbian.com jessie main utils jessie-desktop
-DELIM
-        fi
-
+	#update repo 
+	apt-get update > /dev/null
+		
         if [[ $svx_short_name == "svx-stable" ]] ; then
                 echo "--------------------------------------------------------------"
                 echo " Adding SvxLink Stable Repository                             "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://45.55.65.11/svxlink/stable/debian/ jessie main
+deb http://otg-repeater.ddns.net/svxlink/stable/debian/ jessie main
 DELIM
         fi
 
+        if [[ $svx_short_name == "svx-release" ]] ; then
+                echo "--------------------------------------------------------------"
+                echo " Adding SvxLink Stable Repository                             "
+                echo "--------------------------------------------------------------"
+                cat > /etc/apt/sources.list.d/svxlink.list << DELIM
+deb http://otg-repeater.ddns.net/svxlink/release/debian/ jessie main
+DELIM
+        fi		
+		
         # SvxLink Testing Repo
         if [[ $svx_short_name == "svx-testing" ]] ; then
                 echo "--------------------------------------------------------------"
                 echo " Adding SvxLink Testing Repository                            "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://45.55.65.11/svxlink/testing/debian/ jessie main
+deb http://otg-repeater.ddns.net/svxlink/testing/debian/ jessie main
 DELIM
 		fi
 
@@ -353,7 +281,7 @@ DELIM
                 echo " Adding SvxLink Devel Repository                              "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://45.55.65.11/svxlink/devel/debian/ jessie main
+deb http://otg-repeater.ddns.net/svxlink/devel/debian/ jessie main
 DELIM
         fi
 
@@ -366,14 +294,18 @@ DELIM
 touch /tmp/stage2
 fi
 
+#add key	
+curl http://otg-repeater.ddns.net/otg-repeater.ddns.net.gpg.key | apt-key add -
+
+
 if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing Svxlink Dependencies...                           "
         echo "--------------------------------------------------------------"
         #svxlink deps
         apt-get install -y --fix-missing sqlite3 libopus0 alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2 libasound2-plugin-equal \
-                libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 gpsd gpsd-clients flite wvdial i2c-tools fail2ban resolvconf inetutils-syslogd \
-				screen time uuid vim usbutils dialog logrotate cron gawk watchdog network-manager git-core python-dev libsigc++-2.0-0c2a alsa-base
+                libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 gpsd gpsd-clients flite i2c-tools fail2ban resolvconf inetutils-syslogd \
+				screen time uuid vim usbutils dialog logrotate cron gawk watchdog git-core python-dev libsigc++-2.0-0c2a alsa-base
                 
         #python deps for python interfae
         echo "--------------------------------------------------------------"
@@ -395,13 +327,11 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 
         apt-get clean
 
-		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing svxlink into the gpio group                        "
         echo "--------------------------------------------------------------"
         #adding user svxlink to gpio user group
         usermod -a -G gpio svxlink
-		fi
 
         echo "--------------------------------------------------------------"
         echo " Installing svxlink sounds                                    "
@@ -417,13 +347,11 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
 		systemctl enable svxlink
 		
-		if [[ $svx_short_name == "svx-devel" ]] ; then
 		#Enable svxreflector
 		echo "--------------------------------------------------------------"
         echo " Enabling SvxReflector Service                              "
         echo "--------------------------------------------------------------"		
 		systemctl enable svxreflector
-		fi
 		
 		#Enable remotetx
 		echo "--------------------------------------------------------------"
@@ -435,17 +363,12 @@ touch /tmp/stage3
 fi
 
 if [[ -f /tmp/stage3 ]] && [[ ! -f /tmp/stage4 ]] ; then
-        # raspBERRY PI ONLY: Add svxlink user to groups: gpio, audio, and daemon
-                if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]]; then
-                        echo "--------------------------------------------------------------"
-                        echo " Add svxlink user to groups: gpio, audio, and daemon          "
-                        echo "--------------------------------------------------------------"
-                                usermod -a -G daemon,gpio,audio svxlink
-                fi
+    echo "--------------------------------------------------------------"
+    echo " Add svxlink user to groups: gpio, audio, and daemon          "
+    echo "--------------------------------------------------------------"
+    usermod -a -G daemon,gpio,audio svxlink
 
-
-if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo+2" ]] ; then
-	#Install asound.conf for audio performance
+#Install asound.conf for audio performance
 	cat > /etc/asound.conf << DELIM
 pcm.dmixed {
     type dmix
@@ -539,67 +462,52 @@ Pcm. Equal  {
 }
 
 DELIM
-	fi
 
-	# Rasberry PI 2/3 ,ODROID C1+/C2:
-	# Set up usb sound for alsa mixer
 	if [[ $snd_short_name == "usb" ]] ; then
-		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] ; then
-			echo "--------------------------------------------------------------"
-			echo " Set up usb sound for alsa mixer                              "
-			echo "--------------------------------------------------------------"
-			if ( ! grep -q snd-usb-audio /etc/modules ); then
-				{ echo "snd-aloop"; echo "snd-usb-audio"; } >> "/etc/modules"
-			fi
-		fi
-	fi
-
-	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
-		echo "--------------------------------------------------------------"
-		echo " Enable the bcm2708 and bcm2835 /etc/modules                  "
-		echo "--------------------------------------------------------------"
-		{ echo "i2c-bcm2708"; echo "spi-bcm2835"; } >> /etc/modules
-		
-	fi
-
-
-	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] || [[ $device_short_name == "oc1+" ]] || [[ $device_short_name == "oc2" ]] || [[ $device_short_name == "neo" ]] || [[ $device_short_name == "neo2" ]] || [[ $device_short_name == "neo+2" ]] || [[ $device_short_name == "k2" ]] ; then
-		echo "--------------------------------------------------------------"
-		echo " Enable the spi & i2c /etc/modules                            "
-		echo "--------------------------------------------------------------"
-		#{ echo "i2c-dev"; echo "w1-gpio"; echo "w1-therm"; } >> /etc/modules
-		{ echo "i2c-dev"; } >> /etc/modules
-	fi
-
-	if [[ $os_short_name == "rasp" ]] ; then
-		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
-			echo "--------------------------------------------------------------"
-			echo " Configuring /boot/config.txt options 1"
-			echo "--------------------------------------------------------------"
+	echo "--------------------------------------------------------------"
+	echo " Set up usb sound for alsa mixer                              "
+	echo "--------------------------------------------------------------"
+		if ( ! grep -q snd-usb-audio /etc/modules ); then
+			{ echo "snd-aloop"; echo "snd-usb-audio"; } >> "/etc/modules"
 			sed -i /boot/config.txt -e "s#dtparam=audio=on#dtparam=audio=off#"
-			sed -i /boot/config.txt -e "s#\#dtparam=i2c_arm=on#dtparam=i2c_arm=on#"
-			sed -i /boot/config.txt -e "s#\#dtparam=spi=on#dtparam=spi=on#"
 		fi
 	fi
-
-	if [[ $os_short_name == "armb" ]] ; then
-		if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
-			echo "--------------------------------------------------------------"
-			echo " Configuring /boot/config.txt options part 2"
-			echo "--------------------------------------------------------------"
-			sed -i /boot/config.txt -e "s#dtparam=audio=on#dtparam=audio=off#"
-			sed -i /boot/config.txt -e "s#dtparam=i2c_arm=off#dtparam=i2c_arm=on#"
-			sed -i /boot/config.txt -e "s#dtparam=i2c1=off#dtparam=i2c_arm=on#"
-			sed -i /boot/config.txt -e "s#dtparam=spi=off#dtparam=spi=on#"
-		fi
+	
+	if [[ $snd_short_name == "sgtl" ]] ; then	
+		echo "--------------------------------------------------------------"
+		echo " Enable the fe-pi in /boot/config.txt                  "
+		echo "--------------------------------------------------------------"
+		{echo "dtoverlay=fe-pi-audio"; echo "dtoverlay=i2s-mmap" } /boot/config.txt
 	fi
+	
+	echo "--------------------------------------------------------------"
+	echo " Enable the bcm2708 and bcm2835 /etc/modules                  "
+	echo "--------------------------------------------------------------"
+	{ echo "i2c-bcm2708"; echo "spi-bcm2835"; } >> /etc/modules
 
-	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
-		echo "--------------------------------------------------------------"
-		echo " Configuring /boot/config.txt options part 3                  "
-		echo "--------------------------------------------------------------"
-		# set usb power level
-		cat >> /boot/config.txt << DELIM
+	echo "--------------------------------------------------------------"
+	echo " Enable the spi & i2c /etc/modules                            "
+	echo "--------------------------------------------------------------"
+	#{ echo "i2c-dev"; echo "w1-gpio"; echo "w1-therm"; } >> /etc/modules
+	{ echo "i2c-dev"; } >> /etc/modules
+
+	echo "--------------------------------------------------------------"
+	echo " Configuring /boot/config.txt options 1"
+	echo "--------------------------------------------------------------"
+	sed -i /boot/config.txt -e "s#\#dtparam=i2c_arm=on#dtparam=i2c_arm=on#"
+	sed -i /boot/config.txt -e "s#\#dtparam=spi=on#dtparam=spi=on#"
+
+	echo "--------------------------------------------------------------"
+	echo " Disable onboard HDMI sound card not used                     "
+	echo "--------------------------------------------------------------"
+	#/boot/config.txt
+	sed -i /boot/config.txt -e "s#dtparam=audio=on#\#dtparam=audio=on#"
+
+	echo "--------------------------------------------------------------"
+	echo " Configuring /boot/config.txt options part 3                  "
+	echo "--------------------------------------------------------------"
+	# set usb power level
+	cat >> /boot/config.txt << DELIM
 
 #usb max current
 usb_max_current=1
@@ -624,22 +532,13 @@ dtoverlay=pi3-miniuart-bt
 overlay=pps-gpio,gpiopin=16
 
 DELIM
-	fi
 
-	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
-		echo "--------------------------------------------------------------"
-		echo " Disable onboard HDMI sound card not used                     "
-		echo "--------------------------------------------------------------"
-		#/boot/config.txt
-		sed -i /boot/config.txt -e "s#dtparam=audio=on#\#dtparam=audio=on#"
-	fi
+
 	
-	if [[ $device_short_name == "rpi2" ]] || [[ $device_short_name == "rpi3" ]] ; then
-		echo "--------------------------------------------------------------"
-		echo " Installing wiringpi                                          "
-		echo "--------------------------------------------------------------"
-		apt-get install -y --force-yes wiringpi
-	fi
+	echo "--------------------------------------------------------------"
+	echo " Installing wiringpi                                          "
+	echo "--------------------------------------------------------------"
+	apt-get install -y --force-yes wiringpi
 
 touch /tmp/stage4
 fi
