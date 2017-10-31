@@ -148,7 +148,7 @@ if [[ ! -f  /tmp/stage1 ]] && [[ ! -f  /tmp/stage1 ]] ; then
 	if [[ "$debian_version" != "9" ]]; then
 	  	echo
 		echo "**** ERROR ****"
-		echo "This script will only work on debian jessie images at this time."
+		echo "This script will only work on debian stretch images at this time."
 		echo "No other version of debian is supported at this time. "
 		echo "**** EXITING ****"
 		exit -1
@@ -238,10 +238,10 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
    	echo " Adding debian repository...                                  "
     echo "--------------------------------------------------------------"
 	cat > /etc/apt/sources.list << DELIM
-deb http://httpredir.debian.org/debian/ jessie main contrib non-free
-deb http://httpredir.debian.org/debian/ jessie-updates main contrib non-free
-deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
-deb http://security.debian.org/ jessie/updates main contrib non-free
+deb http://httpredir.debian.org/debian/ stretch main contrib non-free
+deb http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
+deb http://httpredir.debian.org/debian/ stretch-backports main contrib non-free
+deb http://security.debian.org/ stretch/updates main contrib non-free
 DELIM
 		
 	#update repo 
@@ -252,7 +252,7 @@ DELIM
                 echo " Adding SvxLink Stable Repository                             "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://otg-repeater.ddns.net/svxlink/stable/debian/ jessie main
+deb http://otg-repeater.ddns.net/svxlink/stable/debian/ stretch main
 DELIM
         fi
 
@@ -261,7 +261,7 @@ DELIM
                 echo " Adding SvxLink Stable Repository                             "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://otg-repeater.ddns.net/svxlink/release/debian/ jessie main
+deb http://otg-repeater.ddns.net/svxlink/release/debian/ stretch main
 DELIM
         fi		
 		
@@ -271,7 +271,7 @@ DELIM
                 echo " Adding SvxLink Testing Repository                            "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://otg-repeater.ddns.net/svxlink/testing/debian/ jessie main
+deb http://otg-repeater.ddns.net/svxlink/testing/debian/ stretch main
 DELIM
 		fi
 
