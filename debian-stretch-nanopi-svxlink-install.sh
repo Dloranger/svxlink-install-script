@@ -214,11 +214,12 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing python and extra deps                             "
         echo "--------------------------------------------------------------"
-        apt-get install -y --fix-missing python-usb python-pip python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
+        apt-get install -y --fix-missing python-dev python-usb python-pip python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
 
         #python spidev support
-        #pip install setuptools
-        #pip install spidev
+		ip install wheel
+        pip install setuptools
+        pip install spidev
 
         #Cleanup
         apt-get clean
@@ -227,7 +228,7 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing svxlink + remotetrx                               "
         echo "--------------------------------------------------------------"
-        apt-get -y --force-yes install svxlink-server remotetrx svxreflector
+        apt-get -y install svxlink-server
 
         apt-get clean
 
@@ -244,18 +245,6 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
         echo " Enabling svxlink Service                                     "
         echo "--------------------------------------------------------------"
         systemctl enable svxlink
-
-		#Enable svxreflector
-        echo "--------------------------------------------------------------"
-        echo " Enabling SvxReflector Service                                "
-        echo "--------------------------------------------------------------"
-        systemctl enable svxreflector
-
-        #Enable remotetx
-        echo "--------------------------------------------------------------"
-        echo " Enabling remotetrx Service                                   "
-        echo "--------------------------------------------------------------"
-        systemctl enable remotetrx
 
         touch /tmp/stage2
 fi
@@ -351,7 +340,7 @@ DELIM
 		echo " Configuring /boot/armbianEnv.txt                             "
 		echo "--------------------------------------------------------------"
 		cat >>/boot/armbianEnv.txt << DELIM
-overlays=sun50i-h3-i2c0.dtbo sun50i-h3-i2c1.dtbo sun50i-h3-i2c2.dtbo sun50i-h3-pwm.dtbo sun50i-h3-spi-spidev.dtbo sun50i-h3-uart1.dtbo sun50i-h3-uart2.dtbo sun50i-h3-w1-gpio.dtbo
+overlays=analog-codec i2c0 i2c1 spi-spidev uart1 w1-gpio usbhost1 usbhost2
 DELIM
 	fi
 
@@ -360,7 +349,7 @@ DELIM
 		echo " Configuring /boot/armbianEnv.txt                             "
 		echo "--------------------------------------------------------------"
 		cat >>/boot/armbianEnv.txt << DELIM
-overlays=sun50i-h5-i2c0.dtbo sun50i-h5-i2c1.dtbo sun50i-h5-i2c2.dtbo sun50i-h5-pwm.dtbo sun50i-h5-spi-spidev.dtbo sun50i-h5-uart1.dtbo sun50i-h5-uart2.dtbo sun50i-h5-w1-gpio.dtbo
+overlays=analog-codec i2c0 i2c1.dtbo spi-spidevuart1 w1-gpio usbhost1 usbhost2
 DELIM
 	fi
 
