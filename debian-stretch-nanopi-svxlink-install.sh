@@ -214,7 +214,7 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing python and extra deps                             "
         echo "--------------------------------------------------------------"
-        apt-get install -y --fix-missing python-dev python-usb python-pip python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
+        apt-get install -y --fix-missing python-dev-all python-usb python-pip python-wheel python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
 
         #python spidev support
 		ip install wheel
@@ -340,7 +340,7 @@ DELIM
 		echo " Configuring /boot/armbianEnv.txt                             "
 		echo "--------------------------------------------------------------"
 		cat >>/boot/armbianEnv.txt << DELIM
-overlays=analog-codec i2c0 i2c1 spi-spidev uart1 w1-gpio usbhost1 usbhost2
+overlays=analog-codec i2c0 i2c1 spi-spidev uart1 w1-gpio
 DELIM
 	fi
 
@@ -349,7 +349,7 @@ DELIM
 		echo " Configuring /boot/armbianEnv.txt                             "
 		echo "--------------------------------------------------------------"
 		cat >>/boot/armbianEnv.txt << DELIM
-overlays=analog-codec i2c0 i2c1.dtbo spi-spidevuart1 w1-gpio usbhost1 usbhost2
+overlays=analog-codec i2c0 i2c1 spi-spidev uart1 w1-gpio
 DELIM
 	fi
 
