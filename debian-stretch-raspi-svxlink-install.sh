@@ -243,7 +243,10 @@ deb http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
 deb http://httpredir.debian.org/debian/ stretch-backports main contrib non-free
 deb http://security.debian.org/ stretch/updates main contrib non-free
 DELIM
-		
+
+#install debian key rings
+apt-get install debian-keyring debian-ports-archive-keyring
+
 	#update repo 
 	apt-get update > /dev/null
 		
