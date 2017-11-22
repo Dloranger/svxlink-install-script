@@ -32,7 +32,7 @@ dpkg-reconfigure tzdata
 #
 #uptdate Locales
 #
-apt-get update > /dev/null  && apt-get -y install locales-all
+apt-get update > /dev/null  && apt-get -y install locales-all dialog whiptail
 dpkg-reconfigure locales
 
 touch /tmp/stage0
@@ -69,9 +69,7 @@ select opt1 in "${options[@]}" "Quit"; do
 	# Release Release
     2 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-release"; break;;
     # Testing Release
-    2 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-testing"; break;;
-    # Devel Release
-    3 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-devel"; break;;
+    3 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-testing"; break;;
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
 
     *) echo "Invalid option. Try another one.";continue;;
@@ -244,11 +242,10 @@ deb http://httpredir.debian.org/debian/ stretch-backports main contrib non-free
 deb http://security.debian.org/ stretch/updates main contrib non-free
 DELIM
 
-#install debian key rings
-apt-get install debian-keyring debian-ports-archive-keyring
+	apt-get update
+	#install debian key rings
+	apt-get install -y --allow-unauthenticated debian-keyring debian-ports-archive-keyring
 
-	#update repo 
-	apt-get update > /dev/null
 		
         if [[ $svx_short_name == "svx-stable" ]] ; then
                 echo "--------------------------------------------------------------"
@@ -297,7 +294,7 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         #svxlink deps
 		apt-get install -y --fix-missing libopus0 alsa-base alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2 \
 			libasound2-plugin-equal libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 flite i2c-tools inetutils-syslogd \
-			screen uuid usbutils whiptail dialog logrotate cron gawk git-core libsigc++-2.0-0v5 
+			screen uuid usbutils logrotate cron gawk git-core libsigc++-2.0-0v5 
 
         #python deps for python interfae
         echo "--------------------------------------------------------------"
