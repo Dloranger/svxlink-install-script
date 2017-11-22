@@ -311,7 +311,7 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing svxlink + remotetrx                               "
         echo "--------------------------------------------------------------"
-        apt-get -y --force-yes install svxlink-server remotetrx svxreflector
+        apt-get -y --force-yes install svxlink-server 
 
         apt-get clean
 
@@ -335,18 +335,6 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
 		systemctl enable svxlink
 		
-		#Enable svxreflector
-		echo "--------------------------------------------------------------"
-        echo " Enabling SvxReflector Service                              "
-        echo "--------------------------------------------------------------"		
-		systemctl enable svxreflector
-		
-		#Enable remotetx
-		echo "--------------------------------------------------------------"
-        echo " Enabling remotetrx Service                                 "
-        echo "--------------------------------------------------------------"
-		systemctl enable remotetrx
-
 touch /tmp/stage3
 fi
 
