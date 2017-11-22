@@ -255,7 +255,7 @@ apt-get install debian-keyring debian-ports-archive-keyring
                 echo " Adding SvxLink Stable Repository                             "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://otg-repeater.ddns.net/svxlink/stable/debian/ stretch main
+deb http://otg-repeater.ddns.net/svxlink/Stable/debian/ stretch main
 DELIM
         fi
 
@@ -264,7 +264,7 @@ DELIM
                 echo " Adding SvxLink Stable Repository                             "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://otg-repeater.ddns.net/svxlink/release/debian/ stretch main
+deb http://otg-repeater.ddns.net/svxlink/Release/debian/ stretch main
 DELIM
         fi		
 		
@@ -274,7 +274,7 @@ DELIM
                 echo " Adding SvxLink Testing Repository                            "
                 echo "--------------------------------------------------------------"
                 cat > /etc/apt/sources.list.d/svxlink.list << DELIM
-deb http://otg-repeater.ddns.net/svxlink/testing/debian/ stretch main
+deb http://otg-repeater.ddns.net/svxlink/Testing/debian/ stretch main
 DELIM
 		fi
 
