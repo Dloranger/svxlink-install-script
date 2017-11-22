@@ -426,17 +426,6 @@ Ctl. Equal  {
    Controls "/home/pi/.alsaequal.bin"
 }
 
-Pcm. Plugequal  {
-   type equal ;
-   Slavic. pcm  "plughw: 0.0" ;
-    Controls "/home/pi/.alsaequal.bin"
-}
-
-Pcm. Equal  {
-   type plug ;
-   Slavic. pcm plugequal ;
-}
-
 DELIM
 
 	if [[ $snd_short_name == "usb" ]] ; then
