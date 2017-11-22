@@ -284,8 +284,7 @@ curl http://otg-repeater.ddns.net/otg-repeater.ddns.net.gpg.key | apt-key add -
                 echo "--------------------------------------------------------------"
                 echo "Performing Base os Update...                                  "
                 echo "--------------------------------------------------------------"
-        		apt-get update > /dev/null
-        		for i in upgrade clean ;do apt-get "${i}" -y --force-yes --fix-missing ; done
+        		for i in update upgrade clean ;do apt-get "${i}" -y --force-yes --fix-missing ; done
 
 touch /tmp/stage2
 fi
