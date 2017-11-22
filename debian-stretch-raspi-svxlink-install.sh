@@ -57,7 +57,7 @@ echo ""
 heading="What type of svxlink install: Stable=1.5.99 Teesting is 1.5.99.x  Devel=Head ?"
 title="Please choose svxlink install type:"
 prompt="Pick a Svxlink install type Stable=1.5.11.99 Teesting is 1.5.99.x  Devel=Head : "
-options=("stable" "release" "testing" "devel")
+options=("stable" "release" "testing")
 echo "$heading"
 echo "$title"
 PS3="$prompt "
@@ -71,7 +71,6 @@ select opt1 in "${options[@]}" "Quit"; do
     # Testing Release
     3 ) echo ""; echo "Building for $opt1"; svx_long_name="$opt1"; svx_short_name="svx-testing"; break;;
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
-
     *) echo "Invalid option. Try another one.";continue;;
 
     esac
@@ -93,7 +92,6 @@ select opt1 in "${options[@]}" "Quit"; do
     case "$REPLY" in
     # Soundcard usb
     1 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="usb"; break;;
-
     # Soundcard sgtl5000
     2 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="sgtl"; break;;
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
