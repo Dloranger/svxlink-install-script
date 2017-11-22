@@ -306,9 +306,9 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 
         # Install svxlink
         echo "--------------------------------------------------------------"
-        echo " Installing svxlink + remotetrx                               "
+        echo " Installing svxlink                           "
         echo "--------------------------------------------------------------"
-        apt-get -y --force-yes install svxlink-server 
+        apt-get -y --force-yes install svxlink-server libasynccpp1.4 libecholib1.3
 
         apt-get clean
 
