@@ -300,6 +300,8 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
         apt-get install -y --fix-missing python3-dev python3-pip python3-wheel python3-setuptools python3-spidev pytpython3-serial \
 			python-libxml2 python-libxslt1 python3-usb libxslt1.1 libxml2 libssl1.1
+			
+		pip install spidev
 
 		#Cleanup
 		apt-get clean
