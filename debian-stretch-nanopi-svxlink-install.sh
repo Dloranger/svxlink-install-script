@@ -235,6 +235,11 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
         git clone https://github.com/RichNeese/en_US-laura-16k-V2.git
         cp -rp en_US-laura-16k-V2/* /usr/share/svxlink/sounds/
         rm -rf en_US-laura-16k-V2
+		
+		
+		#add custom logic dir
+		mkdir /etc/svxlink/local-events.d
+		ln -s /etc/svxlink/local-events.d /usr/share/svxlink/events.d/local
 
         #Svxlink Services
         #enable svxlink

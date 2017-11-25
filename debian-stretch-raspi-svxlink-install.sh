@@ -314,6 +314,9 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 
         apt-get clean
 
+		mkdir /etc/svxlink/local-events.d
+		ln -s /etc/svxlink/local-events.d /usr/share/svxlink/events.d/local
+		
         echo "--------------------------------------------------------------"
         echo " Installing svxlink into the gpio group                        "
         echo "--------------------------------------------------------------"
