@@ -205,21 +205,16 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
 	echo " Installing Svxlink Dependencies...                           "
 	echo "--------------------------------------------------------------"
 	#svxlink deps
-	apt-get install -y --fix-missing sqlite3 libopus0 alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2\
-			libasound2-plugin-equal libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 flite i2c-tools fail2ban \
-			resolvconf inetutils-syslogd screen time uuid vim usbutils whiptail dialog logrotate cron gawk watchdog git-core \
-			python3-dev libsigc++-2.0-0v5
+		apt-get install -y --fix-missing libopus0 alsa-base alsa-utils vorbis-tools sox libsox-fmt-mp3 librtlsdr0 ntp libasound2 \
+			libasound2-plugin-equal libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 flite i2c-tools inetutils-syslogd \
+			screen uuid usbutils whiptail dialog logrotate cron gawk git-core libsigc++-2.0-0v5 
 
         #python deps for python interfae
         echo "--------------------------------------------------------------"
         echo " Installing python and extra deps                             "
         echo "--------------------------------------------------------------"
-        apt-get install -y --fix-missing python-dev python-usb python-pip python3-serial fswebcam libxml2 libxml2-dev libssl-dev libxslt1-dev
-
-        #python spidev support
-		ip install wheel
-        pip install setuptools
-        pip install spidev
+        apt-get install -y --fix-missing python3-dev  python3-pip python3-wheel python3-setuptools 	python3-spidev pytpython3-serial \
+			python-libxml2 python-libxslt1 python3-usb libxslt1.1 libxml2 libssl1.1
 
         #Cleanup
         apt-get clean
@@ -340,7 +335,7 @@ DELIM
 		echo " Configuring /boot/armbianEnv.txt                             "
 		echo "--------------------------------------------------------------"
 		cat >>/boot/armbianEnv.txt << DELIM
-overlays=analog-codec i2c0 i2c1 spi-spidev uart1 w1-gpio usbhost1 usbhost2
+overlays=analog-codec i2c0 i2c1 spi-spidev uart1 w1-gpio
 DELIM
 	fi
 
@@ -349,7 +344,7 @@ DELIM
 		echo " Configuring /boot/armbianEnv.txt                             "
 		echo "--------------------------------------------------------------"
 		cat >>/boot/armbianEnv.txt << DELIM
-overlays=analog-codec i2c0 i2c1.dtbo spi-spidevuart1 w1-gpio usbhost1 usbhost2
+overlays=analog-codec i2c0 i2c1 spi-spidev uart1 w1-gpio
 DELIM
 	fi
 
