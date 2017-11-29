@@ -234,10 +234,10 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
    	echo " Adding debian repository...                                  "
     echo "--------------------------------------------------------------"
 	cat > /etc/apt/sources.list << DELIM
-deb http://httpredir.debian.org/debian/ stretch main contrib non-free
-deb http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
-deb http://httpredir.debian.org/debian/ stretch-backports main contrib non-free
-deb http://security.debian.org/ stretch/updates main contrib non-free
+deb http://deb.debian.org/debian stretch main contrib non-free
+deb http://deb.debian.org/debian stretch-updates main contrib non-free
+deb http://deb.debian.org/debian stretch-backports main contrib non-free
+deb http://security.debian.org stretch/updates main contrib non-free
 DELIM
 
 	apt-get update
