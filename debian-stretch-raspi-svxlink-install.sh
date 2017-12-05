@@ -54,9 +54,9 @@ echo ""
 # Request user input to ask for type of svxlink install
 #
 echo ""
-heading="What type of svxlink install: Stable=1.5.99 Teesting is 1.5.99.x  Devel=Head ?"
+heading="What type of svxlink install: Stable=15.99 Teesting is 15.99.x  Devel=Head ?"
 title="Please choose svxlink install type:"
-prompt="Pick a Svxlink install type Stable=1.5.11.99 Teesting is 1.5.99.x  Devel=Head : "
+prompt="Pick a Svxlink install type Stable=15.99 Teesting is 15.99.x  Devel=Head : "
 options=("stable" "release" "testing")
 echo "$heading"
 echo "$title"
@@ -234,10 +234,10 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
    	echo " Adding debian repository...                                  "
     echo "--------------------------------------------------------------"
 	cat > /etc/apt/sources.list << DELIM
-deb http://deb.debian.org/debian stretch main contrib non-free
-deb http://deb.debian.org/debian stretch-updates main contrib non-free
-deb http://deb.debian.org/debian stretch-backports main contrib non-free
-deb http://security.debian.org stretch/updates main contrib non-free
+deb http://deb.debian.org/debian stretch  main contrib non-free
+deb http://deb.debian.org/debian-debug stretch-debug main contrib non-free
+deb http://deb.debian.org/debian-ports stretch main contrib non-free
+deb http://deb.debian.org/debian-security stretch main contrib non-free
 DELIM
 
 	apt-get update
