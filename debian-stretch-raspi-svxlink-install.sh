@@ -230,19 +230,19 @@ if [[ -f /tmp/stage1 ]] && [[ ! -f /tmp/stage2 ]] ; then
 # See also <which httpredir.debian.org>.  This service is identical to http.debian.net.
 #
 
-   	echo "--------------------------------------------------------------"
-   	echo " Adding debian repository...                                  "
-    echo "--------------------------------------------------------------"
-	cat > /etc/apt/sources.list << DELIM
-deb http://deb.debian.org/debian stretch  main contrib non-free
-deb http://deb.debian.org/debian-debug stretch-debug main contrib non-free
-deb http://deb.debian.org/debian-ports stretch main contrib non-free
-deb http://deb.debian.org/debian-security stretch main contrib non-free
-DELIM
+#   	echo "--------------------------------------------------------------"
+#   	echo " Adding debian repository...                                  "
+#    echo "--------------------------------------------------------------"
+#	cat > /etc/apt/sources.list << DELIM
+#deb http://deb.debian.org/debian stretch  main contrib non-free
+#deb http://deb.debian.org/debian-debug stretch-debug main contrib non-free
+#deb http://deb.debian.org/debian-ports stretch main contrib non-free
+#deb http://deb.debian.org/debian-security stretch main contrib non-free
+#DELIM
 
-	apt-get update
+#	apt-get update
 	#install debian key rings
-	apt-get install -y --allow-unauthenticated debian-keyring debian-ports-archive-keyring
+#	apt-get install -y --allow-unauthenticated debian-keyring debian-ports-archive-keyring
 
 		
         if [[ $svx_short_name == "svx-stable" ]] ; then
