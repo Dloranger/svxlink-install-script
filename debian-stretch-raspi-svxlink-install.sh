@@ -54,9 +54,9 @@ echo ""
 # Request user input to ask for type of svxlink install
 #
 echo ""
-heading="What type of svxlink install: Stable=15.99 Teesting is 15.99.x  Devel=Head ?"
+heading="What type of svxlink install: Stable=15.99 Testing is 15.99.x  Devel=Head ?"
 title="Please choose svxlink install type:"
-prompt="Pick a Svxlink install type Stable=15.99 Teesting is 15.99.x  Devel=Head : "
+prompt="Pick a Svxlink install type Stable=15.99 Testing is 15.99.x  Devel=Head : "
 options=("stable" "release" "testing")
 echo "$heading"
 echo "$title"
@@ -162,7 +162,7 @@ cat << DELIM
 
          This Script Is Meant To Be Run On A Fresh Install Of
 
-             debian 8 (Jessie) ArmHF / Arm64 
+             debian 9 (STRETCH) ArmHF / Arm64 
 
 DELIM
 
@@ -298,12 +298,13 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
         echo "--------------------------------------------------------------"
         echo " Installing python and extra deps                             "
         echo "--------------------------------------------------------------"
-        apt-get install -y --fix-missing --allow-unauthenticated python3-dev python3-pip python3-wheel python3-setuptools python3-spidev pytpython3-serial \
+        apt-get install -y --fix-missing --allow-unauthenticated python3-dev python3-pip python3-wheel python3-setuptools python3-spidev python3-serial \
 			python-libxml2 python-libxslt1 python3-usb libxslt1.1 libxml2 libssl1.1
 			
 		pip install spidev
 
 		#Cleanup
+		apt-get clean
 		apt-get clean
 
         # Install svxlink
@@ -444,7 +445,7 @@ DELIM
 		echo "--------------------------------------------------------------"
 		echo " Enable the fe-pi in /boot/config.txt                  "
 		echo "--------------------------------------------------------------"
-		{echo "dtoverlay=fe-pi-audio"; echo "dtoverlay=i2s-mmap" } /boot/config.txt
+		{echo "dtoverlay=fe-pi-audio"; echo "dtoverlay=i2s-mmap" } >> /boot/config.txt
 	fi
 	
 	echo "--------------------------------------------------------------"
@@ -488,7 +489,7 @@ dtoverlay=i2s-mmap
 #Enable mcp23s17 Overlay
 dtoverlay=mcp23017,addr=0x20,gpiopin=12
 
-Enable mcp3008 adc overlay
+#Enable mcp3008 adc overlay
 dtoverlay=mcp3008:spi0-0-present,spi0-0-speed=3600000
 
 #use the UART for GPS
