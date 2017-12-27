@@ -451,7 +451,8 @@ DELIM
 	echo "--------------------------------------------------------------"
 	echo " Enable the bcm2708 and bcm2835 /etc/modules                  "
 	echo "--------------------------------------------------------------"
-	{ echo "i2c-bcm2708"; echo "spi-bcm2835"; } >> /etc/modules
+	{ echo "i2c-bcm2708"; echo "spi-bcm2835";echo "i2c-bcm2835"; } >> /etc/modules
+	
 
 	echo "--------------------------------------------------------------"
 	echo " Enable the spi & i2c /etc/modules                            "
