@@ -30,7 +30,7 @@ if [[ ! -f  /tmp/stage0 ]] ; then
 dpkg-reconfigure tzdata
 
 #
-#uptdate Locales
+#update Locales
 #
 apt-get update > /dev/null  && apt-get -y install locales-all dialog whiptail
 dpkg-reconfigure locales
@@ -84,7 +84,7 @@ echo ""
 heading="What type of SoundCard ?"
 title="Please choose Soundcard type:"
 prompt="Pick your sound card:"
-options=("usbsnd" "sgtl5000")
+options=("usbsnd" "sgtl5000" "octo8))
 echo "$heading"
 echo "$title"
 PS3="$prompt"
@@ -94,8 +94,10 @@ select opt1 in "${options[@]}" "Quit"; do
     1 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="usb"; break;;
     # Soundcard sgtl5000
     2 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="sgtl"; break;;
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
-	
+    # Soundcard octo8
+	3 ) echo ""; echo "Building for $opt1"; snd_long_name="$opt1"; snd_short_name="octo8"; break;;
+	$(( ${#options[@]}+1 )) ) echo "Goodbye!"; exit;;
+		
     *) echo "Invalid option. Try another one.";continue;;
 
     esac
@@ -348,88 +350,126 @@ if [[ -f /tmp/stage3 ]] && [[ ! -f /tmp/stage4 ]] ; then
     usermod -a -G daemon,gpio,audio svxlink
 
 #Install asound.conf for audio performance
-	cat > /etc/asound.conf << DELIM
-pcm.dmixed {
-    type dmix
-    ipc_key 1024
-    ipc_key_add_uid 0
-    slave.pcm "hw:0,0"
-}
+	if [[ $snd_short_name == "octo8" ]] ; then
+		cat > /etc/asound.conf << DELIM
 
-pcm.dsnooped {
-    type dsnoop
-    ipc_key 1025
-    slave.pcm "hw:0,0"
-}
+			pcm.!default {
+		#       type hw
+		#       card 0
+			type plug
+			slave.pcm "anyChannelCount"
+		}
 
-pcm.duplex {
-    type asym
-    playback.pcm "dmixed"
-    capture.pcm "dsnooped"
-}
+		ctl.!default {
+			type hw
+			card 0
+		}
 
-pcm.left {
-    type asym
-    playback.pcm "shared_left"
-    capture.pcm "dsnooped"
-}
+		pcm.anyChannelCount {
+			type route
+			slave.pcm "hw:0"
+			slave.channels 8;
+			ttable {
+				0.0 1
+				1.1 1
+				2.2 1
+				3.3 1
+				4.4 1
+				5.5 1
+				6.6 1
+				7.7 1
+			}
+		}
 
-pcm.right {
-    type asym
-    playback.pcm "shared_right"
-    capture.pcm "dsnooped"
-}
+		ctl.anyChannelCount {
+			type hw;
+			card 0;
+		}
+		DELIM
+	else
+		cat > /etc/asound.conf << DELIM
+		
+		pcm.dmixed {
+			type dmix
+			ipc_key 1024
+			ipc_key_add_uid 0
+			slave.pcm "hw:0,0"
+		}
 
-# Instruct ALSA to use pcm.duplex as the default device
-pcm.!default {
-    type plug
-    slave.pcm "duplex"
-}
+		pcm.dsnooped {
+			type dsnoop
+			ipc_key 1025
+			slave.pcm "hw:0,0"
+		}
 
-ctl.!default {
-    type hw
-    card 0
-}
+		pcm.duplex {
+			type asym
+			playback.pcm "dmixed"
+			capture.pcm "dsnooped"
+		}
 
-# split left channel off
-pcm.shared_left {
-   type plug
-   slave.pcm "hw:0"
-   slave.channels 2
-   ttable.0.0 1
-}
+		pcm.left {
+			type asym
+			playback.pcm "shared_left"
+			capture.pcm "dsnooped"
+		}
 
-# split right channel off
-pcm.shared_right {
-   type plug
-   slave.pcm "hw:0"
-   slave.channels 2
-   ttable.1.1 1
-}
+		pcm.right {
+			type asym
+			playback.pcm "shared_right"
+			capture.pcm "dsnooped"
+		}
 
-#dtparam=i2s=on
-Pcm_slave.hw_loopback {
-   Pcm "hw: loopback, 1.2"
-   Channels 2
-   Format RAW
-   Rate 16000
-}
+		# Instruct ALSA to use pcm.duplex as the default device
+		pcm.!default {
+			type plug
+			slave.pcm "duplex"
+		}
 
-Pcm.plug_loopback {
-   Type plug
-   Slave hw_loopback
-    Ttable {
-    0.0 = 1
-    0.1 = 1
-  }
-}
+		ctl.!default {
+			type hw
+			card 0
+		}
 
-Ctl. Equal  {
-   type equal ;
-   Controls "/home/pi/.alsaequal.bin"
-}
+		# split left channel off
+		pcm.shared_left {
+			type plug
+			slave.pcm "hw:0"
+			slave.channels 2
+			ttable.0.0 1
+		}
 
-DELIM
+		# split right channel off
+		pcm.shared_right {
+			type plug
+			slave.pcm "hw:0"
+			slave.channels 2
+			ttable.1.1 1
+		}
+
+		#dtparam=i2s=on
+		Pcm_slave.hw_loopback {
+			Pcm "hw: loopback, 1.2"
+			Channels 2
+			Format RAW
+			Rate 16000
+		}
+
+		Pcm.plug_loopback {
+			Type plug
+			Slave hw_loopback
+			Ttable {
+				0.0 = 1
+				0.1 = 1
+			}
+		}
+
+		Ctl. Equal  {
+			type equal ;
+			Controls "/home/pi/.alsaequal.bin"
+		}
+		DELIM
+	fi
 
 	if [[ $snd_short_name == "usb" ]] ; then
 	echo "--------------------------------------------------------------"
@@ -446,6 +486,24 @@ DELIM
 		echo " Enable the fe-pi in /boot/config.txt                  "
 		echo "--------------------------------------------------------------"
 		{echo "dtoverlay=fe-pi-audio"; echo "dtoverlay=i2s-mmap" } >> /boot/config.txt
+	fi
+	
+	if [[ $snd_short_name == "octo8" ]] ; then	
+		echo "--------------------------------------------------------------"
+		echo " Enable the OCTO8 in /boot/config.txt                  "
+		echo "--------------------------------------------------------------"
+		# Disable lxpanel to prevent conflicts
+		sed -i 's/\=volumealsa/\=REMOVEvolumealsa/' ~pi/.config/lxpanel/LXDE-pi/panels/panel
+		#remove pulse audio to prevent conflicts
+		apt-get remove pulseaudio
+		#configure the octo8
+		echo "Check the device tree overlay is setup correctly in the file /boot/config.txt ..."
+		sudo bash -c "sed -i \"s/^\s*dtparam=audio/#dtparam=audio/\" /boot/config.txt"
+		cnt=`grep -c audioinjector-wm8731-audio /boot/config.txt`
+		if [ "$cnt" -eq "0" ]; then
+			sudo bash -c "echo '# enable the AudioInjector.net sound card
+			dtoverlay=audioinjector-addons' >> /boot/config.txt"
+		fi
 	fi
 	
 	echo "--------------------------------------------------------------"
