@@ -351,6 +351,20 @@ if [[ -f /tmp/stage3 ]] && [[ ! -f /tmp/stage4 ]] ; then
 
 #Install asound.conf for audio performance
 	if [[ $snd_short_name == "octo8" ]] ; then
+		echo "
+pcm.!default {
+#       type hw
+#       card 0
+        type plug
+        slave.pcm "anyChannelCount"
+}
+
+ctl.!default {
+        type hw
+        card 0
+}
+" >> ~/.asoundrc
+		
 		cat > /etc/asound.conf << DELIM
 
 			pcm.!default {
