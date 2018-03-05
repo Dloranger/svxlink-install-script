@@ -290,15 +290,24 @@ if [[ -f /tmp/stage2 ]] && [[ ! -f /tmp/stage3 ]] ; then
 			libasound2-plugin-equal libspeex1 libgcrypt20 libpopt0 libgsm1 tcl8.6 tk8.6 bzip2 flite i2c-tools inetutils-syslogd \
 			screen uuid usbutils logrotate cron gawk git-core libsigc++-2.0-0v5 
 
-        #python deps for python interfae
+        #python deps for python interface
         echo "--------------------------------------------------------------"
         echo " Installing python and extra deps                             "
         echo "--------------------------------------------------------------"
         apt-get install -y --fix-missing --allow-unauthenticated python3-dev python3-pip python3-wheel python3-setuptools python3-spidev python3-serial \
-			python-libxml2 python-libxslt1 python3-usb libxslt1.1 libxml2 libssl1.1
-			
-		pip install spidev
-
+			python-libxml2 python-libxslt1 python3-usb libxslt1.1 libxml2 libssl1.1 
+		
+		#only install these packages if using the octo-8 sound card, as that is the only product that uses the LCD.
+		# These are needed to run the script
+		if [$snd_short_name == "octo8"] ; then 	
+			apt-get install -y --fix-missing --allow-unauthenticated python3-smbus python3-pigpio RPi.GPIO pigpio
+			pip3 install inotify
+			# set LCD script to run as a service
+			systemctl enable LCD
+		fi	
+		pip3 install spidev 
+		
+		
 		#Cleanup
 		apt-get clean
 
