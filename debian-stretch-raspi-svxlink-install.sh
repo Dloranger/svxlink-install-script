@@ -492,8 +492,12 @@ fi
 		sudo bash -c "sed -i \"s/^\s*dtparam=audio/#dtparam=audio/\" /boot/config.txt"
 		cnt=`grep -c audioinjector-wm8731-audio /boot/config.txt`
 		if [ "$cnt" -eq "0" ]; then
-			{ echo "# enable the AudioInjector.net sound card"; 
-			 echo "dtoverlay=audioinjector-addons"; } >> /boot/config.txt
+			{ 
+			#echo "# enable the AudioInjector.net sound card"; 
+			#echo "dtoverlay=audioinjector-addons,non-stop-clocks"; 
+			echo "# enable the PI-REPEATER-6X sound card & GPIO Expanders"; 
+			echo "dtoverlay=pi-repeater-6x-mcp23017"; 
+			} >> /boot/config.txt
 		fi
 	fi
 	
